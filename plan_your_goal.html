@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan Your Goals - Mutual Fund</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        header {
+            background-color: #4caf50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-group button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background-color: #45a049;
+        }
+        .output {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f5e9;
+            border: 1px solid #a5d6a7;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Plan Your Goals with Mutual Funds</h1>
+    <p>Set your financial goals and calculate the investment required.</p>
+</header>
+
+<div class="container">
+    <form id="goalPlannerForm">
+        <div class="form-group">
+            <label for="goalName">Goal Name:</label>
+            <input type="text" id="goalName" name="goalName" placeholder="e.g., Buy a house, Child's education" required>
+        </div>
+        <div class="form-group">
+            <label for="goalAmount">Goal Amount (₹):</label>
+            <input type="number" id="goalAmount" name="goalAmount" placeholder="Enter the target amount" required>
+        </div>
+        <div class="form-group">
+            <label for="timeHorizon">Time Horizon (Years):</label>
+            <input type="number" id="timeHorizon" name="timeHorizon" placeholder="Enter number of years" required>
+        </div>
+        <div class="form-group">
+            <label for="expectedReturn">Expected Annual Return (%):</label>
+            <input type="number" id="expectedReturn" name="expectedReturn" placeholder="e.g., 10" required>
+        </div>
+        <div class="form-group">
+            <button type="button" onclick="calculateInvestment()">Calculate Investment</button>
+        </div>
+    </form>
+
+    <div class="output" id="output" style="display: none;">
+        <h3>Investment Plan:</h3>
+        <p id="outputText"></p>
+    </div>
+</div>
+
+<script>
+    function calculateInvestment() {
+        // Retrieve input values
+        const goalAmount = parseFloat(document.getElementById("goalAmount").value);
+        const timeHorizon = parseInt(document.getElementById("timeHorizon").value, 10);
+        const expectedReturn = parseFloat(document.getElementById("expectedReturn").value) / 100;
+
+        // Validate input
+        if (isNaN(goalAmount) || isNaN(timeHorizon) || isNaN(expectedReturn)) {
+            alert("Please enter valid inputs!");
+            return;
+        }
+
+        // Calculate monthly investment using SIP formula
+        const monthlyReturn = expectedReturn / 12;
+        const totalMonths = timeHorizon * 12;
+        const sip = goalAmount * monthlyReturn / (Math.pow(1 + monthlyReturn, totalMonths) - 1);
+
+        // Display result
+        const outputText = document.getElementById("outputText");
+        outputText.textContent = `To achieve your goal of ₹${goalAmount} in ${timeHorizon} years with an expected annual return of ${(expectedReturn * 100).toFixed(2)}%, you need to invest ₹${sip.toFixed(2)} per month.`;
+
+        const outputDiv = document.getElementById("output");
+        outputDiv.style.display = "block";
+    }
+</script>
+
+</body>
+</html>

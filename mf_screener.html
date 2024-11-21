@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mutual Fund Screener</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+        }
+        .filter-form {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .filter-form select, .filter-form input {
+            margin: 10px 0;
+            padding: 8px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .mutual-fund-table {
+            width: 100%;
+            margin-top: 30px;
+            border-collapse: collapse;
+        }
+        .mutual-fund-table th, .mutual-fund-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        .mutual-fund-table th {
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <h1>Mutual Fund Screener</h1>
+        <p>Find the best mutual funds based on your preferences</p>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+
+        <!-- Filter Form -->
+        <div class="filter-form">
+            <h3>Filter Mutual Funds</h3>
+            <form id="mutualFundForm">
+                <label for="fundType">Fund Type</label>
+                <select id="fundType" name="fundType">
+                    <option value="">-- Select --</option>
+                    <option value="Equity">Equity</option>
+                    <option value="Debt">Debt</option>
+                    <option value="Hybrid">Hybrid</option>
+                </select>
+
+                <label for="riskLevel">Risk Level</label>
+                <select id="riskLevel" name="riskLevel">
+                    <option value="">-- Select --</option>
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                </select>
+
+                <label for="minReturn">Min Return (%)</label>
+                <input type="number" id="minReturn" name="minReturn" placeholder="Enter minimum return percentage">
+
+                <label for="maxExpense">Max Expense Ratio (%)</label>
+                <input type="number" id="maxExpense" name="maxExpense" placeholder="Enter maximum expense ratio">
+
+                <button type="button" onclick="filterFunds()">Apply Filters</button>
+            </form>
+        </div>
+
+        <!-- Mutual Fund Results Table -->
+        <div id="fundResults">
+            <table class="mutual-fund-table">
+                <thead>
+                    <tr>
+                        <th>Fund Name</th>
+                        <th>Fund Type</th>
+                        <th>Risk Level</th>
+                        <th>1-Year Return (%)</th>
+                        <th>Expense Ratio (%)</th>
+                    </tr>
+                </thead>
+                <tbody id="fundTableBody">
+                    <!-- Data will be inserted here dynamically -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Sample data for mutual funds
+        const mutualFunds = [
+            { name: 'ABC Equity Fund', type: 'Equity', risk: 'High', return: 15, expenseRatio: 1.2 },
+            { name: 'XYZ Debt Fund', type: 'Debt', risk: 'Low', return: 6, expenseRatio: 0.5 },
+            { name: 'PQR Hybrid Fund', type: 'Hybrid', risk: 'Medium', return: 10, expenseRatio: 0.8 },
+            { name: 'DEF Equity Fund', type: 'Equity', risk: 'High', return: 20, expenseRatio: 1.5 },
+            { name: 'LMN Debt Fund', type: 'Debt', risk: 'Low', return: 5, expenseRatio: 0.6 }
+        ];
+
+        // Function to filter mutual funds based on form inputs
+        function filterFunds() {
+            const fundType = document.getElementById('fundType').value;
+            const riskLevel = document.getElementById('riskLevel').value;
+            const minReturn = document.getElementById('minReturn').value;
+            const maxExpense = document.getElementById('maxExpense').value;
+
+            const filteredFunds = mutualFunds.filter(fund => {
+                return (
+                    (fundType === '' || fund.type === fundType) &&
+                    (riskLevel === '' || fund.risk === riskLevel) &&
+                    (minReturn === '' || fund.return >= minReturn) &&
+                    (maxExpense === '' || fund.expenseRatio <= maxExpense)
+                );
+            });
+
+            displayFunds(filteredFunds);
+        }
+
+        // Function to display the filtered funds in the table
+        function displayFunds(funds) {
+            const tableBody = document.getElementById('fundTableBody');
+            tableBody.innerHTML = '';
+
+            if (funds.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="5">No funds found matching your criteria.</td></tr>';
+                return;
+            }
+
+            funds.forEach(fund => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${fund.name}</td>
+                    <td>${fund.type}</td>
+                    <td>${fund.risk}</td>
+                    <td>${fund.return}%</td>
+                    <td>${fund.expenseRatio}%</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Display all funds initially
+        displayFunds(mutualFunds);
+    </script>
+
+</body>
+</html>
